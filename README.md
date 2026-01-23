@@ -1,6 +1,6 @@
 # Homebrew Tap for gospeak
 
-This is the official Homebrew tap for [gospeak](https://github.com/schappim/gospeak) - a Go CLI for text-to-speech using OpenAI or ElevenLabs TTS API, with no ffmpeg required.
+This is the official Homebrew tap for [gospeak](https://github.com/schappim/gospeak) - a Go CLI for text-to-speech using OpenAI, ElevenLabs, or Deepgram TTS API, with no ffmpeg required.
 
 ## Installation
 
@@ -21,6 +21,7 @@ brew upgrade gospeak
 # Set your API key(s)
 export OPENAI_API_KEY="your-openai-api-key"
 export ELEVENLABS_API_KEY="your-elevenlabs-api-key"  # optional
+export DEEPGRAM_API_KEY="your-deepgram-api-key"  # optional
 
 # Speak text directly (uses OpenAI by default)
 gospeak "Hello, world!"
@@ -31,7 +32,7 @@ echo "Hello from the command line" | gospeak
 
 ## Providers
 
-gospeak supports two TTS providers:
+gospeak supports three TTS providers:
 
 ### OpenAI (default)
 
@@ -49,14 +50,25 @@ gospeak -p elevenlabs -v josh "Using Josh's voice"
 gospeak -p elevenlabs -v rachel "Using Rachel's voice"
 ```
 
+### Deepgram
+
+```bash
+gospeak -p deepgram "Hello from Deepgram"
+gospeak -p deepgram -v asteria "Using Asteria voice"
+gospeak -p deepgram -v thalia "Using Thalia voice (Aura 2)"
+```
+
 ## Usage
 
 ```bash
 # Choose a voice
 # OpenAI: alloy, echo, fable, onyx, nova, shimmer
 # ElevenLabs: rachel, domi, bella, antoni, elli, josh, arnold, adam, sam, george, charlie, emily, lily, michael
+# Deepgram: asteria, luna, stella, athena, hera, orion, arcas, perseus, angus, orpheus, helios, zeus
+# Deepgram Aura 2: thalia, andromeda, helena, jason, apollo, ares
 gospeak -v nova "Hello with nova"
 gospeak -p elevenlabs -v josh "Hello with Josh"
+gospeak -p deepgram -v asteria "Hello with Asteria"
 
 # Hear all OpenAI voices demo
 gospeak --all "The quick brown fox jumps over the lazy dog"
@@ -86,7 +98,7 @@ gospeak -p elevenlabs -m eleven_turbo_v2_5 "Turbo ElevenLabs model"
 
 | Option | Short | Description | Default |
 |--------|-------|-------------|---------|
-| `--provider` | `-p` | TTS provider (`openai`, `elevenlabs`) | `openai` |
+| `--provider` | `-p` | TTS provider (`openai`, `elevenlabs`, `deepgram`) | `openai` |
 | `--voice` | `-v` | Voice to use | Provider-specific |
 | `--model` | `-m` | Model to use | Provider-specific |
 | `--output` | `-o` | Save audio to file | - |
@@ -109,9 +121,12 @@ date | gospeak -v nova
 # Use with LLM output
 llm "Tell me a joke" | gospeak -v nova
 llm "Tell me a story" | gospeak -p elevenlabs -v josh
+llm "Tell me a fact" | gospeak -p deepgram -v asteria
 
 # Compare providers
-gospeak "Hello world" && gospeak -p elevenlabs "Hello world"
+gospeak "Hello world"
+gospeak -p elevenlabs "Hello world"
+gospeak -p deepgram "Hello world"
 ```
 
 ## Documentation
