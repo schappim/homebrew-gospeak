@@ -13,9 +13,16 @@ class Gospeak < Formula
   end
 
   test do
-    assert_match "gospeak", shell_output("#{bin}/gospeak --help")
-    assert_match "elevenlabs", shell_output("#{bin}/gospeak --help")
-    assert_match "deepgram", shell_output("#{bin}/gospeak --help")
-    assert_match "--sfx", shell_output("#{bin}/gospeak --help")
+    # gospeak writes its usage to stderr, so it has to be folded into stdout
+    # for shell_output to see it at all.
+    help = shell_output("#{bin}/gospeak --help 2>&1")
+    assert_match "gospeak", help
+    assert_match "elevenlabs", help
+    assert_match "deepgram", help
+    assert_match "--sfx", help
+
+    # A missing API key is the one error path reachable without credentials.
+    no_key = shell_output("#{bin}/gospeak --sfx 'a bell' 2>&1", 1)
+    assert_match "ELEVENLABS_API_KEY", no_key
   end
 end
