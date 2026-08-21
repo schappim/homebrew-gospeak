@@ -1,8 +1,8 @@
 class Gospeak < Formula
   desc "CLI for text-to-speech and sound effects via OpenAI, ElevenLabs, or Deepgram"
   homepage "https://github.com/schappim/gospeak"
-  url "https://github.com/schappim/gospeak/archive/refs/tags/v0.6.0.tar.gz"
-  sha256 "916dc05b6adba46990c49aa526cfced9b23dd32583cfe1c11b1c3f4941759bf1"
+  url "https://github.com/schappim/gospeak/archive/refs/tags/v0.7.1.tar.gz"
+  sha256 "6efefeaa5db48494020b834824af8ef1a9d4cfaf0a6fdd333e000eb5106c31ce"
   license "MIT"
   head "https://github.com/schappim/gospeak.git", branch: "master"
 
@@ -21,6 +21,8 @@ class Gospeak < Formula
     assert_match "deepgram", help
     assert_match "--sfx", help
     assert_match "--config", help
+    assert_match "marin", help
+    assert_match "gpt-4o-mini-tts", help
 
     # The config file selects a provider, and a missing API key is the one error
     # path reachable without credentials — so the key gospeak asks for is proof
@@ -42,6 +44,11 @@ class Gospeak < Formula
       # --sfx picks ElevenLabs on its own, over a config file naming another one.
       assert_match "ELEVENLABS_API_KEY",
                    shell_output("#{bin}/gospeak --sfx 'a bell' 2>&1", 1)
+
+      # A voice the named model cannot speak is caught before any credential is
+      # needed, so it doubles as proof the newer voices are wired up at all.
+      conflict = shell_output("#{bin}/gospeak --no-config -v marin -m tts-1-hd 'hi' 2>&1", 1)
+      assert_match "gpt-4o-mini-tts", conflict
     end
   end
 end

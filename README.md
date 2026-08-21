@@ -39,8 +39,11 @@ gospeak supports three TTS providers:
 ```bash
 gospeak "Hello with OpenAI"
 gospeak -v nova "Using nova voice"
-gospeak -v alloy "Using alloy voice"
+gospeak -v cedar "Using cedar, one of the newest voices"
 ```
+
+`ballad`, `verse`, `marin` and `cedar` only exist on the `gpt-4o-mini-tts` model.
+gospeak selects it for them automatically, so no `-m` is needed.
 
 ### ElevenLabs
 
@@ -102,11 +105,12 @@ gospeak --sfx -d 10 --loop -o rain.mp3 "steady rain on a tin roof"
 
 ```bash
 # Choose a voice
-# OpenAI: alloy, echo, fable, onyx, nova, shimmer
+# OpenAI: alloy, ash, ballad, coral, echo, fable, nova, onyx, sage, shimmer, verse, marin, cedar
 # ElevenLabs: rachel, domi, bella, antoni, elli, josh, arnold, adam, sam, george, charlie, emily, lily, michael
 # Deepgram: asteria, luna, stella, athena, hera, orion, arcas, perseus, angus, orpheus, helios, zeus
 # Deepgram Aura 2: thalia, andromeda, helena, jason, apollo, ares
 gospeak -v nova "Hello with nova"
+gospeak -v marin "OpenAI rates marin and cedar the best of the roster"
 gospeak -p elevenlabs -v josh "Hello with Josh"
 gospeak -p deepgram -v asteria "Hello with Asteria"
 
@@ -131,6 +135,7 @@ gospeak -p elevenlabs --similarity 0.9 "Higher similarity"
 
 # Use different models
 gospeak -m tts-1 "Standard OpenAI model"
+gospeak -m gpt-4o-mini-tts -v cedar "Newest model, speaks all 13 voices"
 gospeak -p elevenlabs -m eleven_turbo_v2_5 "Turbo ElevenLabs model"
 ```
 
