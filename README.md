@@ -58,6 +58,46 @@ gospeak -p deepgram -v asteria "Using Asteria voice"
 gospeak -p deepgram -v thalia "Using Thalia voice (Aura 2)"
 ```
 
+## Config File
+
+Set your default provider and voice once in `~/.gospeak.json` instead of typing
+them on every run:
+
+```json
+{
+  "provider": "elevenlabs",
+  "voice": "josh",
+
+  "providers": {
+    "openai":   { "voice": "nova" },
+    "deepgram": { "voice": "thalia" }
+  }
+}
+```
+
+`gospeak "Hello"` now speaks with Josh on ElevenLabs. Anything you type on the
+command line still beats the file, and a `providers` entry beats the file-wide
+setting for that provider. `provider`, `voice`, `model` and `speed` are all
+supported; API keys stay in environment variables.
+
+```bash
+# Point at a different file for one run
+gospeak --config ./project-voice.json "Hello"
+
+# Or ignore the file entirely
+gospeak --no-config "Hello"
+```
+
+## Sound Effects
+
+```bash
+# Describe the sound instead of speaking text - picks ElevenLabs by itself
+gospeak --sfx "distant thunder rolling across a valley"
+
+# Pin the length (0.5-30 seconds) and make it loop seamlessly
+gospeak --sfx -d 10 --loop -o rain.mp3 "steady rain on a tin roof"
+```
+
 ## Usage
 
 ```bash
@@ -108,6 +148,13 @@ gospeak -p elevenlabs -m eleven_turbo_v2_5 "Turbo ElevenLabs model"
 | `--all` | - | Speak with all voices (OpenAI) | `false` |
 | `--stability` | - | Voice stability (ElevenLabs) | `0.5` |
 | `--similarity` | - | Similarity boost (ElevenLabs) | `0.75` |
+| `--sfx` | - | Generate a sound effect instead of speech (ElevenLabs) | `false` |
+| `--duration` | `-d` | Sound effect length in seconds, 0.5-30 (`--sfx` only) | model decides |
+| `--influence` | - | Prompt adherence, 0.0-1.0 (`--sfx` only) | `0.3` |
+| `--loop` | - | Make the sound effect loop seamlessly (`--sfx` only) | `false` |
+| `--config` | - | Path to a config file | `~/.gospeak.json` |
+| `--no-config` | - | Ignore the config file | `false` |
+| `--help` | `-h` | Show help message | - |
 
 ## Scripting Examples
 
